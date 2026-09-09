@@ -1,18 +1,23 @@
 import os
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage, SystemMessage
 
-class GeminiRAG:
+class EuriRAG:
     def __init__(self, model_name="gemini-2.5-pro", temperature=0.2):
         """
-        Initializes the Gemini LLM model.
-        Uses a vision-enabled Gemini model by default to handle image context (multimodal).
+        Initializes the EURI LLM model.
         """
-        api_key = os.environ.get("GEMINI_API_KEY")
+        api_key = os.environ.get("EURI_API_KEY")
         if not api_key:
-            raise ValueError("GEMINI_API_KEY environment variable not set.")
+            raise ValueError("EURI_API_KEY environment variable not set.")
             
-        self.llm = ChatGoogleGenerativeAI(model=model_name, temperature=temperature, google_api_key=api_key)
+        self.llm = ChatOpenAI(
+            model=model_name,
+            base_url="https://api.euron.one/api/v1/euri",
+            api_key=api_key,
+            max_tokens=1000,
+            temperature=temperature
+        )
         self.system_prompt = (
             "You are an assistant for question-answering tasks. "
             "Use the provided image context (which represents pages of financial PDFs) to answer the question. "
@@ -24,7 +29,7 @@ class GeminiRAG:
         """
         Answers a question using the provided list of base64 images as context.
         """
-        print(f"Sending request to Gemini LLM ({self.llm.model}) ...")
+        print(f"Sending request to EURI LLM ({self.llm.model_name}) ...")
         
         # Build the message content.
         content = [{"type": "text", "text": question}]
