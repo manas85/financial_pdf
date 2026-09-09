@@ -89,9 +89,10 @@ jobs:
           clean: false
 
       # ── Tear down existing stack ──────────────────────────────────────────────
-      - name: Stop existing containers (if any)
+      - name: Stop existing containers and cleanup memory
         run: |
           docker compose down --remove-orphans || true
+          docker system prune -af || true
 
       # ── Pull latest image built by CI ─────────────────────────────────────────
       - name: Pull latest image from ECR

@@ -9,6 +9,10 @@ services:
       - "6334:6334"
     volumes:
       - ./qdrant_storage:/qdrant/storage:z
+    deploy:
+      resources:
+        limits:
+          memory: 350M
     restart: unless-stopped
 
   generation-service:
@@ -31,6 +35,10 @@ services:
       - S3_BUCKET_NAME=${S3_BUCKET_NAME:-financial-rag-documents-001}
     depends_on:
       - qdrant
+    deploy:
+      resources:
+        limits:
+          memory: 300M
     restart: unless-stopped
 
   ingestion-worker:
@@ -49,5 +57,9 @@ services:
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
     depends_on:
       - qdrant
+    deploy:
+      resources:
+        limits:
+          memory: 300M
     restart: unless-stopped
 
