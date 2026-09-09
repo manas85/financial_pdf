@@ -20,7 +20,7 @@ load_dotenv(dotenv_path=os.path.join(PROJECT_ROOT, '.env'))
 load_dotenv(dotenv_path=os.path.join(PROJECT_ROOT, 'src', '.env'))
 
 from src.embedding_service.document_processor import iter_pdf_pages, image_to_base64, get_pdf_page_count
-from src.embedding_service.embedder import LangchainEmbedder
+from src.embedding_service.embedder import GeminiEmbedder
 from src.embedding_service.qdrant_manager import QdrantManager
 
 AWS_REGION = os.getenv("AWS_REGION", "eu-north-1")
@@ -170,7 +170,7 @@ def start_worker():
     sqs_client = boto3.client("sqs", region_name=AWS_REGION)
     s3_client = boto3.client("s3", region_name=AWS_REGION)
     qdrant_manager = init_qdrant_manager()
-    embedder = LangchainEmbedder()
+    embedder = GeminiEmbedder(model_name="gemini-embedding-2")
 
     print("\nWaiting for S3 upload events (long-polling SQS 20s)... Press Ctrl+C to stop.")
     while running:

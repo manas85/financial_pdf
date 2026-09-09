@@ -13,7 +13,7 @@ sys.path.append(PROJECT_ROOT)
 # Load environment variables
 load_dotenv(dotenv_path=os.path.join(PROJECT_ROOT, '.env'))
 
-from src.embedding_service.embedder import LangchainEmbedder
+from src.embedding_service.embedder import GeminiEmbedder
 from src.embedding_service.qdrant_manager import QdrantManager
 from src.generation_service.euri_rag_llm import EuriRAG
 from src.generation_service.validation import QueryRequest, QueryResponse, UploadResponse
@@ -69,7 +69,7 @@ def startup_event():
     print("Initializing clients for generation service...")
     try:
         qdrant_manager = init_qdrant_manager(collection_name)
-        embedder = LangchainEmbedder()
+        embedder = GeminiEmbedder()
         rag_llm = EuriRAG()
         print("All clients successfully initialized.")
     except Exception as e:
